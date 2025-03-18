@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
 public class Cube : MonoBehaviour
 {
     private int xyz;
+    private float r, g, b;
+    private bool br, bg, bb;
     private float speed;
     public MeshRenderer Renderer;
     private Material material;
@@ -18,7 +21,14 @@ public class Cube : MonoBehaviour
         speed = Random.Range(5.0f, 50.0f);
         material = Renderer.material;
 
-        material.color = new Color(0.5f, 1.0f, 0.3f, 0.4f);
+        r = 0.5f;
+        g = 1.0f;
+        b = 0.3f;
+        br = true;
+        bg = true;
+        bb = false;
+        material.color = new Color(r, g, b, 1.0f);
+
     }
 
     void Update()
@@ -45,12 +55,34 @@ public class Cube : MonoBehaviour
         }
         transform.Rotate(x, y, z);
 
-        /*
-        r += 0.1f;
-        if(r>1.0f) r = 0.0f;
-        Render.material.color = new color(r,g,b, 0.4f);
-        */
-        
+        ChangeColor(ref br, ref r, 0.04f * Time.deltaTime);
+        ChangeColor(ref bg, ref g, 0.05f * Time.deltaTime);
+        ChangeColor(ref bb, ref b, 0.06f * Time.deltaTime);
+        Renderer.material.color = new Color(r, g, b, 1.0f);
+
+
+    }
+
+    private void ChangeColor(ref bool isAdd, ref float col, float val)
+    {
+        if (isAdd)
+        {
+            col += val;
+            if (col > 1.0f)
+            {
+                col = 1.0f;
+                isAdd = false;
+            }
+        }
+        else
+        {
+            col -= val;
+            if (col < 0f)
+            {
+                col = 0f;
+                isAdd = true;
+            }
+        }
 
     }
 }
